@@ -18,12 +18,31 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-      
+      new InjectManifest({
+        swSrc: "./src-sw.js"
+      }),
+      new HtmlWebpackPlugin(),
+      new WebpackPwaManifest()
     ],
 
     module: {
       rules: [
-        
+        {
+          test: /\.(?:js|mjs|cjs)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                ['@babel/preset-env', { targets: "defaults" }]
+              ]
+            }
+          }
+        },
+        {
+          test: /\.css$/i,
+          use: ["style-loader", "css-loader"]
+        }
       ],
     },
   };
